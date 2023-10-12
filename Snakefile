@@ -95,6 +95,8 @@ rule make_pdb:
         pdb = input_dir / "{protid}.pdb"
     benchmark:
         output_dir / benchmarks_dir / "{protid}.make_pdb.txt"
+    conda:
+        "envs/api.yml"
     shell:
         '''
         python ProteinCartography/esmfold_apiquery.py -i {input.cds}
@@ -207,6 +209,8 @@ rule aggregate_foldseek_fraction_seq_identity:
         protid = "{protid}"
     benchmark:
         output_dir / benchmarks_dir / "{protid}.aggregate_foldseek_fident.txt"
+    conda:
+        "envs/pandas.yml"
     shell:
         '''
         python ProteinCartography/aggregate_foldseek_fraction_seq_identity.py -i {input.m8files} -o {output.fident_features} -p {params.protid}
@@ -242,6 +246,8 @@ rule fetch_uniprot_metadata:
         additional_fields = UNIPROT_ADDITIONAL_FIELDS
     benchmark:
         output_dir / benchmarks_dir / "get_uniprot_metadata.txt"
+    conda:
+        "envs/fetch_uniprot_metadata.yml"
     shell:
         '''
         python ProteinCartography/fetch_uniprot_metadata.py -i {input} -o {output} -a {params.additional_fields}
@@ -258,6 +264,8 @@ rule filter_uniprot_hits:
         max_length = MAX_LENGTH
     benchmark:
         output_dir / benchmarks_dir / "filter_uniprot_hits.txt"
+    conda:
+        "envs/pandas.yml"
     shell:
         '''
         python ProteinCartography/filter_uniprot_hits.py -i {input} -o {output} -m {params.min_length} -M {params.max_length}
@@ -289,6 +297,8 @@ rule download_pdbs:
         outdir = output_dir / foldseekclustering_dir
     benchmark:
         output_dir / benchmarks_dir / downloading_dir / "{acc}.download_pdbs.txt"
+    conda:
+        "envs/api.yml"
     shell:
         '''
         python ProteinCartography/fetch_accession.py -a {wildcards.acc} -o {params.outdir} -f pdb
@@ -318,6 +328,8 @@ rule assess_pdbs:
         clusteringdir = output_dir / foldseekclustering_dir
     benchmark:
         output_dir / benchmarks_dir / "assess_pdbs.txt"
+    conda:
+        "envs/plotting.yml"
     shell:
         '''
         python ProteinCartography/prep_pdbpaths.py -d {params.clusteringdir} {params.inputdir} -o {output.pdb_paths}
@@ -393,6 +405,8 @@ rule input_distances:
         protid = "{protid}"
     benchmark:
         output_dir / benchmarks_dir / "{protid}.input_distances.txt"
+    conda:
+        "envs/pandas.yml"
     shell:
         '''
         python ProteinCartography/extract_input_distances.py -i {input} -o {output} -p {params.protid}
@@ -412,6 +426,8 @@ rule calculate_concordance:
     output: output_dir / clusteringresults_dir / '{protid}_concordance_features.tsv'
     benchmark:
         output_dir / benchmarks_dir / "{protid}.calculate_concordance.txt"
+    envs:
+        "envs/pandas.yml"
     shell:
         '''
         python ProteinCartography/calculate_concordance.py -t {input.tmscore_file} -f {input.fident_file} -o {output} -p {params.protid}
@@ -431,6 +447,8 @@ rule get_source:
         protid = PROTID
     benchmark:
         output_dir / benchmarks_dir / "get_source.txt"
+    conda:
+        "envs/pandas.yml"
     shell:
         '''
         python ProteinCartography/get_source.py -i {input.pivoted} -f {input.hitfiles} -o {output.pivot} -k {params.protid}
@@ -458,6 +476,8 @@ rule aggregate_features:
         override = OVERRIDE_FILE
     benchmark:
         output_dir / benchmarks_dir / "aggregate_features.txt"
+    conda:
+        "envs/pandas.yml"
     shell:
         '''
         python ProteinCartography/aggregate_features.py -i {input} -o {output} -v {params.override}
