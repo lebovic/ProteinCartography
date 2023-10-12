@@ -299,6 +299,7 @@ rule download_pdbs:
         output_dir / benchmarks_dir / downloading_dir / "{acc}.download_pdbs.txt"
     conda:
         "envs/api.yml"
+    localrule: True
     shell:
         '''
         python ProteinCartography/fetch_accession.py -a {wildcards.acc} -o {params.outdir} -f pdb
