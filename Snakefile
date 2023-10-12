@@ -153,6 +153,8 @@ rule map_refseqids:
         uniprothits = output_dir / blastresults_dir / "{protid}.blasthits.uniprot.txt"
     benchmark:
         output_dir / benchmarks_dir / "{protid}.map_refseqids.txt"
+    conda:
+        "envs/map_refseqids.yml"
     shell:
         '''
         python ProteinCartography/map_refseqids.py -i {input.refseqhits} -o {output.uniprothits}
