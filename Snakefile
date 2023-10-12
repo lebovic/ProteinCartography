@@ -180,6 +180,8 @@ rule run_foldseek:
         foldseekhits = output_dir / foldseekresults_dir / "{protid}.foldseekhits.txt"
     params:
         fs_databases = expand("{fs_databases}", fs_databases = FS_DATABASES)
+    conda:
+        "envs/foldseek.yml"
     benchmark:
         output_dir / benchmarks_dir / "{protid}.run_foldseek.txt"
     shell:
