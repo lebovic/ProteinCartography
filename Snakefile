@@ -357,6 +357,9 @@ rule foldseek_clustering:
         resultsdir = output_dir / clusteringresults_dir
     conda:
         "envs/foldseek.yml"
+    resources:
+        mem_mb=32 * 1000
+    threads: 16
     benchmark:
         output_dir / benchmarks_dir / "foldseek_clustering.txt"
     shell:
