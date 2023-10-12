@@ -299,6 +299,9 @@ rule download_pdbs:
         output_dir / benchmarks_dir / downloading_dir / "{acc}.download_pdbs.txt"
     conda:
         "envs/api.yml"
+    resources:
+        mem_mb=256
+    threads: 1
     localrule: True
     shell:
         '''
