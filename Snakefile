@@ -426,7 +426,7 @@ rule calculate_concordance:
     output: output_dir / clusteringresults_dir / '{protid}_concordance_features.tsv'
     benchmark:
         output_dir / benchmarks_dir / "{protid}.calculate_concordance.txt"
-    envs:
+    conda:
         "envs/pandas.yml"
     shell:
         '''
